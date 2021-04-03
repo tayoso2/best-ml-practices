@@ -12,11 +12,11 @@ Also, there are many questions surrounding the ML problem and how do you identif
 
 ## Model Creation
 
-There are 7 major steps to building a machine learning model in a . Importantly, most of these steps are low-level but a very integral part of the coding process. 
+There are 7 major steps to building a machine learning model. Some of these steps are low-level but a very integral part of the coding process. 
 
 1. Data Collection
 2. Data Preparation
-   - This includes feature engineering, feature selection e.g. using `SelectKBest()` and data exploration.
+   - This includes data exploration, feature engineering, feature selection e.g. using `SelectKBest()`.
 3. Choose a model
 
    - Decide on the algorithms to use to create the model and the error metric as well.
@@ -24,7 +24,7 @@ There are 7 major steps to building a machine learning model in a . Importantly,
 
    - Set seed.
    - Train Test split and use cross-validate on all the models
-   - Standardise the feature variables using MinMax Scaler, Standard Scaler etc. Make sure to `fit_transform()` the train data, `transform()` the test data. [4] 
+   - Standardise the feature variables using MinMax Scaler, Standard Scaler etc. Make sure to `fit_transform()` the train data, `transform()` the test data. This was discussed clearly in this article [What and why behind fit_transform() and transform() | Towards Data Science](https://towardsdatascience.com/what-and-why-behind-fit-transform-vs-transform-in-scikit-learn-78f915cf96fe)
    - if you are dealing with KNN and K-Means (both use Euclidean distance), PCA, Neural Networks, gradient descent algorithms that compute distance (cosine or Euclidean for example) or assumes normality, scale!
      
    - Decision trees do not need scaling. 
@@ -32,7 +32,7 @@ There are 7 major steps to building a machine learning model in a . Importantly,
    - Evaluate the models
 5. Refit the selected model using the steps in 4 above.
 6. Parameter Tune the selected model
-7. Predict using the best performing parameters on unseen datasets. [5]
+7. Predict using the best performing parameters on unseen datasets. [2]
 
 
 
@@ -75,7 +75,7 @@ print(classification_report(Y_test, predictions))
 
 #### Pipelines
 
-A pipeline is a progression of steps where information is changed. In this way, you may have a class for each filter and afterward another class to join those means into the pipeline and make a complete final pipeline.[2]
+A pipeline is a progression of steps where information is changed. In this way, you may have a class for each filter and afterward another class to join those means into the pipeline and make a complete final pipeline.[3]
 
 *NOTE: The script below is used to explain the concept behind pipelines and not necessarily explain the ML steps previously discussed.*
 
@@ -252,7 +252,7 @@ $$
 
 - When your **problem is balanced** using accuracy is usually a good start. An additional benefit is that it is really easy to explain it to non-technical stakeholders in your project,
 
-- When **every class is equally important** to you.[3]
+- When **every class is equally important** to you.[4]
 
   
 
@@ -290,7 +290,7 @@ $$
 
 - Pretty much in every binary classification problem where you care more about the positive class. There is also a Multi-Class F1 Score.
 
-- It **can be easily explained to business stakeholders** which in many cases can be a deciding factor. Always remember, machine learning is just a tool to solve a business problem. [3]
+- It **can be easily explained to business stakeholders** which in many cases can be a deciding factor. Always remember, machine learning is just a tool to solve a business problem. [4]
 
   
 
@@ -303,7 +303,7 @@ PRC is short for "Precision Recall Curve". You can use this plot to make an educ
 - when you want to **communicate precision/recall decision** to other stakeholders
 - when you want to **choose the threshold that fits the business problem**.
 - when your data is <u>**heavily imbalanced**</u>. As mentioned before, it was discussed extensively in this [article by Takaya Saito and Marc Rehmsmeier](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4349800/). The intuition is the following: since PR AUC focuses mainly on the positive class (PPV and TPR) it cares less about the frequent negative class.
-- when **you care more about positive than negative class**. If you care more about the positive class and hence PPV and TPR you should go with Precision-Recall curve and PR AUC (average precision).[3]
+- when **you care more about positive than negative class**. If you care more about the positive class and hence PPV and TPR you should go with Precision-Recall curve and PR AUC (average precision).[4]
 
 
 
@@ -315,7 +315,7 @@ AUC is short for "Area Under the Curve". ROC is short for "Receiver Operating Ch
 
 - You **should use it** when you ultimately **care about ranking predictions** and not necessarily about outputting well-calibrated probabilities (read this [article by Jason Brownlee](https://machinelearningmastery.com/calibrated-classification-model-in-scikit-learn/) if you want to learn about probability calibration).
 - You **should not use it** when your **data is heavily imbalanced**. It was discussed extensively in this [article by Takaya Saito and Marc Rehmsmeier](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4349800/). The intuition is the following: false positive rate for highly imbalanced datasets is pulled down due to a large number of true negatives.
-- You **should use it when you care equally about positive and negative classes**. It naturally extends the imbalanced data discussion from the last section. If we care about true negatives as much as we care about true positives then it totally makes sense to use ROC AUC.[3]
+- You **should use it when you care equally about positive and negative classes**. It naturally extends the imbalanced data discussion from the last section. If we care about true negatives as much as we care about true positives then it totally makes sense to use ROC AUC.[4]
 
 
 
@@ -354,7 +354,6 @@ There is a lot of resource for writing and testing ML code in python. "scikit-le
 ## Sources
 
 1. [All about Feature Scaling. Scale data for better performance of… | by Baijayanta Roy | Towards Data Science](https://towardsdatascience.com/all-about-feature-scaling-bcc0ad75cb35)
-2. [ML Pipelines using scikit-learn and GridSearchCV | by Nikhil pentapalli | Analytics Vidhya | Medium](https://medium.com/analytics-vidhya/ml-pipelines-using-scikit-learn-and-gridsearchcv-fe605a7f9e05)
-3. [F1 Score vs ROC AUC vs Accuracy vs PR AUC: Which Evaluation Metric Should You Choose? - neptune.ai](https://neptune.ai/blog/f1-score-accuracy-roc-auc-pr-auc)
-4. [What and why behind fit_transform() and transform() | Towards Data Science](https://towardsdatascience.com/what-and-why-behind-fit-transform-vs-transform-in-scikit-learn-78f915cf96fe)
-5. [[7 Steps to Machine Learning: How to Prepare for an Automated Future | by Dr Mark van Rijmenam | DataSeries | Medium]](https://medium.com/dataseries/7-steps-to-machine-learning-how-to-prepare-for-an-automated-future-78c7918cb35d#:~:text=7 Steps to Machine Learning%3A How to Prepare,... 6 Parameter tuning. ... 7 Prediction. )
+2. [[7 Steps to Machine Learning: How to Prepare for an Automated Future | by Dr Mark van Rijmenam | DataSeries | Medium]](https://medium.com/dataseries/7-steps-to-machine-learning-how-to-prepare-for-an-automated-future-78c7918cb35d#:~:text=7 Steps to Machine Learning%3A How to Prepare,... 6 Parameter tuning. ... 7 Prediction. )
+3. [ML Pipelines using scikit-learn and GridSearchCV | by Nikhil pentapalli | Analytics Vidhya | Medium](https://medium.com/analytics-vidhya/ml-pipelines-using-scikit-learn-and-gridsearchcv-fe605a7f9e05)
+4. [F1 Score vs ROC AUC vs Accuracy vs PR AUC: Which Evaluation Metric Should You Choose? - neptune.ai](https://neptune.ai/blog/f1-score-accuracy-roc-auc-pr-auc)
