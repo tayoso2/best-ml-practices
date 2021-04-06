@@ -19,13 +19,13 @@ There are 7 major steps to building a machine learning model. Some of these step
    - This includes data exploration, feature engineering, feature selection e.g. using `SelectKBest()`.
 3. Choose a model
 
-   - Decide on the algorithms to use to create the model and the error metric as well.
+   - Decide on the error metric which fits the business problem and select the algorithms to use to create the model.
 4. Train the models
 
    - Set seed.
    - Train Test split and use cross-validate on all the models
    - Standardise the feature variables using MinMax Scaler, Standard Scaler etc. Make sure to `fit_transform()` the train data, `transform()` the test data. This was discussed clearly in this article [What and why behind fit_transform() and transform() | Towards Data Science](https://towardsdatascience.com/what-and-why-behind-fit-transform-vs-transform-in-scikit-learn-78f915cf96fe)
-   - if you are dealing with KNN and K-Means (both use Euclidean distance), PCA, Neural Networks, gradient descent algorithms that compute distance (cosine or Euclidean for example) or assumes normality, scale!
+   - if you are dealing with KNN and K-Means (both use Euclidean distance), PCA, Neural Networks, gradient descent algorithms that compute distance (Cosine or Euclidean for example) or assumes normality, scale!
      
    - Decision trees do not need scaling. 
      - You wouldn’t want to scale ordinal features. [1]
@@ -120,7 +120,7 @@ titanic_df
 # Split the data into train and test.
 X = titanic_df.drop('Survived', axis=1)
 y = titanic_df['Survived']
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
 
 # define features according to feature type
 numeric_features = ['Age', 'Fare']
@@ -271,7 +271,9 @@ $$
 This indicates what proportion of **actual positives** were **identified correctly**. 
 
 Sometimes they are referred to as **True Positive Rate, Sensitivity, Recall Curves**. Let’s say we were trying to detect if an apple was poison or not. In this case, we would want to reduce the number of False Negatives because we hope to not miss any poison apples in the batch. Recall would be the best evaluation metric to use here because it measures how many poison apples we might have missed. We are not too concerned with mislabelling an apple as poisonous because we would rather be safe than sorry. More clearly, Recall defines how good a test is at detecting the positives.
-
+$$
+Recall = TP/(TP + FN)
+$$
 As mentioned earlier, **Sensitivity** is the same as **Recall**, however, **Specificity**, also known as **True Negative Rate** measures how good the test is at avoiding false alarms. 
 $$
 Specificity = TN/(TN+FP) = 1 - TPR
@@ -296,13 +298,13 @@ $$
 
 ####	PRC AUC
 
-PRC is short for "Precision Recall Curve". You can use this plot to make an educated decision when it comes to the classic precision/recall dilemma. Obviously, the higher the recall the lower the precision. Knowing **at which recall your precision starts to fall fast** can help you choose the threshold and deliver a better model.
+PRC is short for "Precision Recall Curve". You can use this plot to make an educated decision when it comes to the classic precision/recall dilemma. At a certain point, the higher the recall the lower the precision. Knowing **at which recall your precision starts to fall fast** can help you choose the threshold and deliver a better model.
 
 <u>Application</u>
 
 - when you want to **communicate precision/recall decision** to other stakeholders
 - when you want to **choose the threshold that fits the business problem**.
-- when your data is <u>**heavily imbalanced**</u>. As mentioned before, it was discussed extensively in this [article by Takaya Saito and Marc Rehmsmeier](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4349800/). The intuition is the following: since PR AUC focuses mainly on the positive class (PPV and TPR) it cares less about the frequent negative class.
+- when your data is <u>**heavily imbalanced**</u>. As mentioned before, it was discussed extensively in this [article by Takaya Saito and Marc Rehmsmeier](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4349800/). The intuition is the following: since PR AUC focuses mainly on the positive class (PPV and TPR), it cares less about the frequent negative class.
 - when **you care more about positive than negative class**. If you care more about the positive class and hence PPV and TPR you should go with Precision-Recall curve and PR AUC (average precision).[4]
 
 
@@ -313,9 +315,9 @@ AUC is short for "Area Under the Curve". ROC is short for "Receiver Operating Ch
 
 <u>Applications</u>
 
-- You **should use it** when you ultimately **care about ranking predictions** and not necessarily about outputting well-calibrated probabilities (read this [article by Jason Brownlee](https://machinelearningmastery.com/calibrated-classification-model-in-scikit-learn/) if you want to learn about probability calibration).
 - You **should not use it** when your **data is heavily imbalanced**. It was discussed extensively in this [article by Takaya Saito and Marc Rehmsmeier](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4349800/). The intuition is the following: false positive rate for highly imbalanced datasets is pulled down due to a large number of true negatives.
-- You **should use it when you care equally about positive and negative classes**. It naturally extends the imbalanced data discussion from the last section. If we care about true negatives as much as we care about true positives then it totally makes sense to use ROC AUC.[4]
+- You **should use it when you care equally about positive and negative classes**. It naturally extends the imbalanced data discussion from the last section. If we care about true negatives as much as we care about true positives then it totally makes sense to use ROC AUC.
+- You **should use it** when you ultimately **care about ranking predictions** and not necessarily about outputting well-calibrated probabilities (read this [article by Jason Brownlee](https://machinelearningmastery.com/calibrated-classification-model-in-scikit-learn/) if you want to learn about probability calibration). [4]
 
 
 
@@ -333,7 +335,7 @@ It is good practice to establish a baseline MAE for your dataset using a baselin
 
 #### MAPE (Mean Absolute Percentage Error)
 
-The lower the MAPE, the more accurate the model. E.g. a model with MAPE 2% is better than a model with MAPE 10% on the same training data.
+The lower the MAPE, the more accurate the model. E.g. a model with MAPE 2% is better than a model with MAPE 10% on the same data.
 
 #### R-squared or Coefficient of Determination
 
@@ -345,9 +347,9 @@ The lower the MAPE, the more accurate the model. E.g. a model with MAPE 2% is be
 
 There is a lot of resource for writing and testing ML code in python. "scikit-learn" is a very powerful tool with loads of resource materials and support and innovation. I reckon this will be suitable for: 
 
-- Writing production ready ML scripts and pipelines in our solutions domain projects
+- Writing production ready ML scripts and pipelines in our solutions domain projects.
 
-- Providing the foresight suite with production-ready code
+- Providing the foresight suite with production-ready code.
 
   
 
