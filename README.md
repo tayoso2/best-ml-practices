@@ -276,7 +276,7 @@ Recall = TP/(TP + FN)
 $$
 As mentioned earlier, **Sensitivity** is the same as **Recall**, however, **Specificity**, also known as **True Negative Rate** measures how good the test is at avoiding false alarms. 
 $$
-Specificity = TN/(TN+FP) = 1 - TPR
+Specificity = TN/(TN+FP) = 1 - FPR
 $$
 
 
